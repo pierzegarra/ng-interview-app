@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from '../../service/user.service';
 import {User} from '../../model/user.model';
+import {NgForOf} from '@angular/common';
 
 @Component({
   selector: 'app-user',
@@ -10,13 +11,15 @@ import {User} from '../../model/user.model';
 })
 export class UserComponent implements OnInit {
 
-  user?: User;
+  user: User = new User();
+
   constructor(private userService: UserService) {}
 
   ngOnInit() {
     console.log("hello world")
-    this.userService.getUserByUsername(this.user).subscribe({
-      next: (user: User[]) => {
+    this.userService.getUserByUsername("").subscribe({
+      next: (user: User) => {
+        this.user = user;
         console.log("user.component ",user)
       },
       error: () => {},

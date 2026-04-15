@@ -11,7 +11,7 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  getUserByUsername(user: User | undefined) {
-    return this.http.get<User[]>(this.baseUrl);
+  getUserByUsername(username: String | undefined) {
+    return this.http.get<User>(this.baseUrl);
   }
 }
