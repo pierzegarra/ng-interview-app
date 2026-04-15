@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from '../../service/user.service';
 import {User} from '../../model/user.model';
-import {NgForOf} from '@angular/common';
 
 @Component({
   selector: 'app-user',
