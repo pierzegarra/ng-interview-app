@@ -1,5 +1,7 @@
 
 export class LoginResponse {
-  authenticated?: string;
-  username?: string;
+  token?: string;
+  refreshToken?: string;
+  user?: string;
+  expiresIn?: string;
 }
