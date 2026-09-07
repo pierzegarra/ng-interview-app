@@ -8,7 +8,14 @@ export const authInterceptor: HttpInterceptorFn
   let token:string | null = localStorageService.getItem("token");
   console.log("authInterceptor token : ", token);
   if (token && typeof token === 'string') {
-    //let decodedAuth = atob(token);
+    const loading = `
+    <div class="spinner-border text-success" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+    `;
+
+    setInterval(loading, 5000)
+
     req = req.clone({
       headers: req.headers
         .set('Authorization', `Bearer ${token}`)

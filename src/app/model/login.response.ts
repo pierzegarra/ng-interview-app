@@ -1,7 +1,8 @@
+import {User} from './user.model';
 
 export class LoginResponse {
   token?: string;
   refreshToken?: string;
-  user?: string;
+  user?: User;
   expiresIn?: string;
 }

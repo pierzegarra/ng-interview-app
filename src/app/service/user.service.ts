@@ -13,7 +13,8 @@ export class UserService {
     return this.http.get<User>(this.baseUrl);
   }
 
-/*  getUserByUsername() {
+  /*
+  getUserByUsername() {
     let username = new HttpParams()
       .set('username', 'admin');
     return this.http.get<User>(this.baseUrl, {params: username});

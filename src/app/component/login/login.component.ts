@@ -1,33 +1,44 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {LocalStorageService} from '../../service/local.storage.service';
 import {LoginService} from '../../service/login.service';
 import {UserService} from '../../service/user.service';
-import {User} from '../../model/user.model';
 import {LoginResponse} from '../../model/login.response';
-import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {form, FormField, required, submit} from '@angular/forms/signals';
+import {LoginRequest} from '../../model/login.request';
+import {tap} from 'rxjs';
+import {Router} from '@angular/router';
 
 @Component({
   imports: [
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormField
   ],
   selector: 'app-login.component',
   styleUrl: './login.component.css',
   templateUrl: './login.component.html',
 })
-export class LoginComponent implements OnInit {
-  loginForm: FormGroup | undefined;
+export class LoginComponent {
+
   private fb: FormBuilder | undefined;
   localStorageService:LocalStorageService = inject(LocalStorageService);
   loginService:LoginService = inject(LoginService);
   userService:UserService = inject(UserService);
-  user: User = new User();
+  private router = inject(Router);
+  currentUser: string | undefined;
 
+  loginModel= signal<LoginRequest>({
+    username: "",
+    password: ""
+  })
+  /*
   ngOnInit() {
     this.loginForm = this.fb?.group({
       username: [''],
       password: ['']
     });
+    console.log("loginForm : " + this.loginForm);
     this.loginService.login().subscribe({
       next: (response: LoginResponse )=> {
         console.log("loginService : ",JSON.stringify(response));
@@ -51,8 +62,51 @@ export class LoginComponent implements OnInit {
       }
     })
   }
+  */
 
-  protected onSubmit() {
-    console.log(this.loginForm?.value);
+  loginForm:any = form(this.loginModel, (schemaPath) => {
+    required(schemaPath.username, {message: 'Username is required'});
+    required(schemaPath.password, {message: 'Password is required'});
+  });
+
+  onSubmit(event: Event) {
+    event.preventDefault();
+    submit(this.loginForm, {
+      action: async () => {
+        const loginRequest: LoginRequest = this.loginModel();
+        console.log("loginRequest : " + loginRequest);
+        this.loginService.login(loginRequest).pipe(tap(
+          (response: LoginResponse) => {
+            console.log("response: ", response);
+            this.currentUser = response.user?.username.toString();
+            return response.user
+          }
+        ))
+          .subscribe({
+            next: (response: LoginResponse) => {
+              console.log("response: " + response);
+              this.getLocalStorage(response);
+              if (response.token) {
+                this.router.navigate(['/user']);
+              }
+            },
+            error: (err: Error) => {
+              console.log("error : " + JSON.parse(Error.toString()));
+            },
+            complete: () => {
+              console.log("Complete");
+            }
+          });
+
+      },
+    }).then(r => {});
+  }
+
+  getLocalStorage(response: LoginResponse){
+    this.localStorageService.setItem("currentUser", !!response.user?.username)
+    this.localStorageService.setItem("token", response.token);
+    this.localStorageService.setItem("refreshToken", response.refreshToken);
+    this.localStorageService.setItem("user", response.user);
+    this.localStorageService.setItem("expiresIn", response.expiresIn);
   }
 }

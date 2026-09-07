@@ -1,38 +1,63 @@
-<div class="class-signup-form-container">
-  <form>
-    <div class="mb-3">
-      <label for="username" class="form-label">Username</label>
-      <input type="text" class="form-control" id="username">
+<div class="class-signup-form-container" [loading]="isLoading === 'loading'">
+  <form (submit)="onSubmit($event)">
+    <div>
+      <label>
+        Username
+        <input type="text" [formField] ="signupForm.username">
+      </label>
     </div>
-    <div class="mb-3">
-      <label for="fullname" class="form-label">Full Name</label>
-      <input type="text" class="form-control" id="fullname">
+    <div>
+      <label>
+        Full Name
+        <input type="text" [formField] ="signupForm.fullName">
+      </label>
     </div>
-    <div class="mb-3">
-      <label for="email" class="form-label">Email</label>
-      <input type="email" class="form-control" id="email">
-      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+    <div>
+      <label>
+        Email
+        <input type="email" [formField] ="signupForm.email">
+      </label>
+      <div id="emailHelp" class="form-text">
+        We'll never share your email with anyone else.
+      </div>
     </div>
-    <div class="mb-3">
-      <label for="phoneNumber" class="form-label">Phone Number</label>
-      <input type="email" class="form-control" id="phoneNumber">
+    <div>
+      <label>
+        Password
+        <input type="password" [formField] ="signupForm.password">
+      </label>
     </div>
-    <div class="mb-3">
-      <label for="password" class="form-label">Password</label>
-      <input type="password" class="form-control" id="password">
+    <div>
+      <label>
+        Phone Number
+        <input type="text" [formField] ="signupForm.phoneNumber">
+      </label>
     </div>
-    <div class="mb-3">
-      <label for="phoneNumber" class="form-label">Phone Number</label>
-      <input type="email" class="form-control" id="phoneNumber">
+    <div>
+      <label>
+        Profile Image Url
+        <input type="text" [formField] ="signupForm.profileImageUrl">
+      </label>
     </div>
-    <div class="mb-3">
-      <label for="profileImageUrl" class="form-label">Profile Image Url</label>
-      <input type="text" class="form-control" id="profileImageUrl">
+    <div>
+      <label>
+        Profile Image Url
+        <select [formField] ="signupForm.role">
+          <option value="ROLE_GUEST">GUEST_AUTHORITIES</option>
+          <option value="ROLE_HR">HR_AUTHORITIES</option>
+          <option value="ROLE_USER">USER_AUTHORITIES</option>
+          <option value="ROLE_CREATOR">CREATOR_AUTHORITIES</option>
+          <option value="ROLE_EDITOR">EDITOR_AUTHORITIES</option>
+          <option value="ROLE_MANAGER">MANAGER_AUTHORITIES</option>
+          <option value="ROLE_ADMIN">ADMIN_AUTHORITIES</option>
+          <option value="ROLE_SUPER_ADMIN">SUPER_ADMIN_AUTHORITIES</option>
+        </select>
+      </label>
     </div>
-    <div class="mb-3 form-check">
+    <div>
       <input type="checkbox" class="form-check-input" id="exampleCheck1">
       <label class="form-check-label" for="exampleCheck1">Check me out</label>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" >Submit</button>
   </form>
 </div>
